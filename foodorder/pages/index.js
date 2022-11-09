@@ -35,14 +35,14 @@ export default function Home() {
     const parseTime = moment(time).format("HH");
 
     if (parseTime >= 10) {
-      toast("Захиалгыг хугацаа дууссан байна. 10 цаг хүртэл захиалах боломжтой!")
+      toast("Захиалгын хугацаа дууссан байна. Та 10 цагаас өмнө захиалах боломжтой!")
     } else {
       axios.post('/api/order', {
         erpcode: `${erpcode}`,
         quantity: `${number}`
       }).then((res) => {
         if (res.status == 200) {
-          toast("Захиалга хийгдлээ!")
+          toast("Захиалга амжилттай хийгдлээ!")
           setTimeout(() => {
             window.location.pathname = '/'
           }, 3000);
@@ -69,10 +69,10 @@ export default function Home() {
             <span className="login100-form-title p-b-41 mb-5 font-bold">
               Захиалга
             </span>
-            <ToastContainer 
+            <ToastContainer
               position='top-center'
               autoClose={2000}
-              />
+            />
             <form className="login100-form validate-form p-b-33 p-t-5" action="">
               <div className="wrap-input100 validate-input" >
               </div>

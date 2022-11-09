@@ -37,7 +37,7 @@ a {
 
   .Toastify__toast {
     top: 5rem !important;
-    height: 6rem !important;
+    height: auto !important;
     font-size: x-large !important;
   }
 

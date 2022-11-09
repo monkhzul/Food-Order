@@ -4,12 +4,11 @@ import styles from '../styles/Home.module.css'
 import React, { useState } from "react";
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import moment from 'moment';
 
 export default function Home() {
 
   const [number, setNumber] = useState('');
-
-  const erp = '';
 
   if (typeof window !== 'undefined') {
     var qs = (function (a) {
@@ -32,21 +31,30 @@ export default function Home() {
 
   const Ordering = (e) => {
     e.preventDefault();
-    axios.post('/api/order', {
-      erpcode: `${erpcode}`,
-      quantity: `${number}`
-    }).then((res) => {
-      if (res.status == 200) {
-        toast("Захиалга хийгдлээ!")
-        setTimeout(() => {
-          window.location.pathname = '/'
-        }, 3000);
-      } else {
-        toast("Алдаа гарлаа!")
-      }
-    }).catch(function (err) {
-      console.log(err)
-    })
+    const time = new Date();
+    const parseTime = moment(time).format("HH");
+    console.log(parseTime)
+
+    if (parseTime >= 10) {
+      toast("Захиалгыг хугацаа дууссан байна. 10 цаг хүртэл захиалах боломжтой!")
+    } else {
+      axios.post('/api/order', {
+        erpcode: `${erpcode}`,
+        quantity: `${number}`
+      }).then((res) => {
+        if (res.status == 200) {
+          toast("Захиалга хийгдлээ!")
+          setTimeout(() => {
+            window.location.pathname = '/'
+          }, 3000);
+        } else {
+          toast("Алдаа гарлаа!")
+        }
+      }).catch(function (err) {
+        console.log(err)
+      })
+    }
+    
   }
 
   return (
@@ -71,7 +79,7 @@ export default function Home() {
               <div className="wrap-input100 validate-input" >
               </div>
               <div className="wrap-input100 validate-input" >
-                <input className="input100" type="text" id="erp" name="erp" placeholder="ERP_CODE" readonly />
+                <input className="input100" type="text" id="erp" name="erp" defaultValue={erpcode} placeholder="ERP_CODE" readonly />
                 <span className="focus-input100" data-placeholder="Код:"></span>
               </div>
 

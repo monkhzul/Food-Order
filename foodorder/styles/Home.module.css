@@ -1,3 +1,6 @@
+.container {
+  background-image: linear-gradient(rgba(0, 0, 0, 0),rgba(0, 0, 0, 0)) , url('/back3.jpg');
+}
 
 .main {
   min-height: 100vh;
@@ -125,3 +128,13 @@
   }
 }
 
+.success {
+  background-image: linear-gradient(rgba(0, 0, 0, 0),rgba(0, 0, 0, 0)) , url('/back3.jpg');
+}
+.expired {
+  background: #111;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

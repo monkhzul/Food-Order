@@ -5,10 +5,12 @@ import React, { useState } from "react";
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import moment from 'moment';
+import { useRouter } from 'next/router'
 
 export default function Home() {
 
   const [number, setNumber] = useState('');
+  const router = useRouter();
 
   if (typeof window !== 'undefined') {
     var qs = (function (a) {
@@ -34,18 +36,23 @@ export default function Home() {
     const time = new Date();
     const parseTime = moment(time).format("HH");
 
-    if (parseTime >= 10) {
-      toast("Захиалгын хугацаа дууссан байна. Та 10 цагаас өмнө захиалах боломжтой!")
+    if (parseTime >= 13) {
+      // toast("Захиалгын хугацаа дууссан байна. Та 10 цагаас өмнө захиалах боломжтой!")
+      router.push({
+        pathname: '/components/Expired'
+      })
     } else {
       axios.post('/api/order', {
         erpcode: `${erpcode}`,
         quantity: `${number}`
       }).then((res) => {
         if (res.status == 200) {
-          toast("Захиалга амжилттай хийгдлээ!")
-          setTimeout(() => {
-            window.location.pathname = '/'
-          }, 3000);
+          // toast("Захиалга амжилттай хийгдлээ!")
+
+          router.push({
+            pathname: '/components/Success'
+          })
+
         } else {
           toast("Алдаа гарлаа!")
         }

@@ -9,10 +9,21 @@ import { useRouter } from 'next/router'
 
 export default function Home() {
 
-  const [number, setNumber] = useState('');
+  const [number, setNumber] = useState(1);
   const router = useRouter();
 
+
   if (typeof window !== 'undefined') {
+
+    function isNumber(event) {
+      var allowed = "0123456789";
+      if (!allowed.includes(event.key)) {
+        event.preventDefault();
+      }
+    }
+
+    document.getElementById('quantity')?.addEventListener('keypress', isNumber);
+
     var qs = (function (a) {
       if (a == "") return {};
       var b = {};
@@ -36,29 +47,33 @@ export default function Home() {
     const time = new Date();
     const parseTime = moment(time).format("HH");
 
-    if (parseTime >= 13) {
-      // toast("Захиалгын хугацаа дууссан байна. Та 10 цагаас өмнө захиалах боломжтой!")
-      router.push({
-        pathname: '/components/Expired'
-      })
+    if (number > 0) {
+      if (parseTime >= 10) {
+        // toast("Захиалгын хугацаа дууссан байна. Та 10 цагаас өмнө захиалах боломжтой!")
+        router.push({
+          pathname: '/components/Expired'
+        })
+      } else {
+        axios.post('/api/order', {
+          erpcode: `${erpcode}`,
+          quantity: `${number}`
+        }).then((res) => {
+          if (res.status == 200) {
+            // toast("Захиалга амжилттай хийгдлээ!")
+    
+            router.push({
+              pathname: '/components/Success'
+            })
+  
+          } else {
+            toast("Алдаа гарлаа!")
+          }
+        }).catch(function (err) {
+          console.log(err)
+        })
+      }
     } else {
-      axios.post('/api/order', {
-        erpcode: `${erpcode}`,
-        quantity: `${number}`
-      }).then((res) => {
-        if (res.status == 200) {
-          // toast("Захиалга амжилттай хийгдлээ!")
-
-          router.push({
-            pathname: '/components/Success'
-          })
-
-        } else {
-          toast("Алдаа гарлаа!")
-        }
-      }).catch(function (err) {
-        console.log(err)
-      })
+      toast("Захиалгын тоо 0-ээс их байх ёстой!")
     }
   }
 
@@ -84,12 +99,12 @@ export default function Home() {
               <div className="wrap-input100 validate-input" >
               </div>
               <div className="wrap-input100 validate-input" >
-                <input className="input100" type="text" id="erp" name="erp" defaultValue={erpcode} placeholder="ERP_CODE" readonly />
+                <input className="input100" type="text" id="erp" name="erp" defaultValue={erpcode} placeholder="ERP_CODE" readonly disabled />
                 <span className="focus-input100" data-placeholder="Код:"></span>
               </div>
 
               <div className="wrap-input100 validate-input">
-                <input className="input100" type="number" id="quantity" name="quantity" defaultValue={1} onChange={(e) => setNumber(e.target.value)} />
+                <input className="input100" type="number" id="quantity" name="quantity" defaultValue={number} min={1} onChange={(e) => setNumber(e.target.value)} />
                 {/* <!--<input className="input100" type="password" name="pass" placeholder="Password">--> */}
                 <span className="focus-input100" data-placeholder="Тоо:"></span>
               </div>
